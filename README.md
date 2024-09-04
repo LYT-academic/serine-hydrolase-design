@@ -63,15 +63,15 @@ Inputs:
 
 Outputs:
 (a) PDB file of diffused CA trace and motif
-(b) TRB file containing mapping of input motif sequence positions to diffusion output sequence positions
+(b) TRB file containing mapping of input motif sequence positions to diffusion output sequence positions and input arguments (needed for refinement)
 
 ### Step 02: Refinement
 
-The backbones generated in step 1 are only CA traces. Refinement generates all-atom models from the CA trace which can then be input to LigandMPNN and Rosetta.
+The backbones generated in step 1 are only CA traces. Refinement generates all-atom models from the CA trace which can then be input to LigandMPNN and Rosetta. Refinement uses the RFdiffusion runscript in a different mode, and outputs the refined PDB files into the same directory as the CA traces.
 
 Inputs:
 (a) PDB file of diffused CA trace
-(b) TODO: ???
+(b) TRB file for diffused CA trace
 
 Outputs:
 PDB file of refined all-atom RFdiffusion output
