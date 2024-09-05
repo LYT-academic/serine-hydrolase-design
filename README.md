@@ -104,7 +104,7 @@ Inputs:
 
 Outputs:
 (a) PDB file of AlphaFold2 prediction
-(b) JSON file of prediction scores
+(b) JSON or CSV file of prediction scores
 
 ### Step 05: Copy substrate from design into AlphaFold2 model
 
