@@ -4,6 +4,8 @@ Code repository for de novo design of serine hydrolases, to accompany the manusc
 
 Lauko A, Pellock SJ. 2024. Computational design of serine hydrolases. *bioRxiv* doi: 10.1101/2024.08.29.610411
 
+Installing Apptainer (https://apptainer.org/docs/admin/main/installation.html) will allow you to run all code using the pre-packaged python environments found in containers/.
+
 
 ## A. Motif Generation
 RFdiffusion takes as input motifs consisting of "stubs" that hold the catalytic residues. To avoid constraining design to existing serine hydrolase active sites, we generate our own.
