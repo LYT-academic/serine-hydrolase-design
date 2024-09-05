@@ -6,6 +6,7 @@ Lauko A, Pellock SJ. 2024. Computational design of serine hydrolases. *bioRxiv* 
 
 Installing Apptainer (https://apptainer.org/docs/admin/main/installation.html) will allow you to run all code using the pre-packaged python environments found in containers/.
 
+Our manuscript describes the de novo design of serine hydrolases, which we performed in two phases: motif generation and design. This code repository is organized such that each substep of motif generation and design (described below) can be run individually with example inputs and outputs found in the inputs/ and outputs/ subdirectories. To run, navigate into the numbered folder within motif_gen/ or design_pipeline/ and run the command(s) in cmd.sh.
 
 ## A. Motif Generation
 RFdiffusion takes as input motifs consisting of "stubs" that hold the catalytic residues. To avoid constraining design to existing serine hydrolase active sites, we generate our own.
@@ -38,6 +39,8 @@ Outputs:
 (b) TRB file containing mapping of input motif sequence positions to diffusion output sequence positions and input arguments (needed for refinement)
 
 ### Step 03: Refinement
+
+The backbones generated in step 1 are only CA traces. Refinement generates all-atom models from the CA trace which can then be input to LigandMPNN and Rosetta. Refinement uses the RFdiffusion runscript in a different mode, and outputs the refined PDB files into the same directory as the CA traces.
 
 Inputs:
 (a) PDB file of CA trace produced by RFdiffusion in step 02.
