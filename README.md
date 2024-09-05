@@ -93,7 +93,40 @@ Outputs:
 
 ### Step 04: Structural validation with AlphaFold2
 
-See AF2 repo TODO
+Two different flavors of structure prediction with AlphaFold2 were used in this study. For most rounds of design, standard single-sequence prediction with model 4 was performed using the superfold wrapper (https://github.com/rdkibler/superfold). For the designs with N+1 oxyanion hole motifs and the 4MU-phenylacetate substrate, we used slightly modified version Initial Guess AlphaFold2 (https://www.nature.com/articles/s41467-023-38328-5). In this case, all-atom positions for a chosen number of long-range residue-residue contacts  were input in the template. This increased the fraction of designs that folded to the correct structure, but a majority of designs still did not fold.
+
+For both flavors, the inputs are similar.
+Inputs:
+(a) PDB file of design model
+(b) If using initial guess: number of contacts to input to template
+
+Outputs:
+(a) PDB file of AlphaFold2 prediction
+(b) JSON file of prediction scores
+
+### Step 05: Copy substrate from design into AlphaFold2 model
+
+To prepare AlphaFold2 predictions for the ChemNet runscript, we need to add the substrate from the design model roughly into the active site. Using the above AlphaFold2 scripts, the predictions should already be aligned onto the design model, making this simply a question of copying the substrate coordinates from one file to another.
+
+Inputs:
+(a) PDB file of design model containing substrate
+(b) PDB file of AlphaFold2 prediction
+
+Outputs:
+(a) PDB file of AlphaFold2 prediction containing substrate
+
+### Step 06: Run ChemNet
+
+We run ChemNet in each of 5 modes representing the 5 intermediates along the reaction coordinate (apo, substrate-bound, tetrahedral intermediate 1 (T1), acylenzyme intermediate (AEI), tetrahedral intermediate 2 (T2)).
+
+Inputs:
+(a) PDB file of AlphaFold2 prediction containing substrate
+(b) Residue number & chain of catalytic serine and the 3-letter code for the intended serine modification (for acylenzyme or tetrahedral intermediates). For the 4MU-butyrate substrate: T1=Q6R, AEI=OAS, T2=ZCX.
+(c) Number of models in output ensemble
+
+Outputs:
+(a) PDB file containing ChemNet ensemble
+(b) CSV file containing additional metrics from ChemNet
 
 
 
