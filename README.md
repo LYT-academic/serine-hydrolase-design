@@ -15,41 +15,47 @@ RFdiffusion takes as input motifs consisting of "stubs" that hold the catalytic 
 The script "invrotzyme.py" samples the interactions between the substrate, serine motif, and histidine motif according to the provided constraint file, producing an array of serine hydrolase active sites. In this case, high probability histidine rotamers on 3-residue helical stubs are being sampled in hydrogen bonding geometries to the serine.
 
 Inputs:
-(a) mu1.params - Rosetta params file describing the substrate in a near-tetrahedral geometry.
-(b) 1LNS.pdb - PDB file containing the local structure around serine nucleophile from a natural hydrolase (1lns).
-(c) 1LNS_mu1.cst - Rosetta enzyme constraint file describing the geometry of the serine-substrate and the serine-histidine interactions.
+(a) Rosetta params file describing the substrate in a near-tetrahedral geometry.
+(b) PDB file containing the local structure around serine nucleophile from a natural hydrolase (1lns).
+(c) Rosetta enzyme constraint file describing the geometry of the serine-substrate and the serine-histidine interactions.
 
 Outputs:
-PDB files containing serine hydrolase active sites.
+(a) PDB files containing serine hydrolase active sites with substrate, serine, and histidine.
 
 ### Step 02: Increasing motif complexity by diffusion
 
 To add additional residues to the motifs (ex. Asp/Glu triad residue, sidechain oxyanion hole residue), we use RFdiffusion with simple Ser-His motifs generated in step 01 to create new backbones. We then refine the outputs, and proceed to search the generated backbones for positions that can accomodate the aforementioned catalytic motifs.
 
-### Step 02a:
+### Step 02:
 RFdiffusion to generate new backbones around a simple motif.
 
 Inputs:
-(a) simple_motif.pdb - PDB file produced in Step 01 containing substrate, catalytic serine, and histidine.
+(a) PDB file produced in Step 01 containing substrate, catalytic serine, and histidine.
+(b) JSON file containing arguments for RFdiffusion. For details see Methods and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
 
 Outputs:
-PDB file of diffusion backbone.
+(a) PDB file of diffusion backbone CA trace
+(b) TRB file containing mapping of input motif sequence positions to diffusion output sequence positions and input arguments (needed for refinement)
 
-### Step 02b: Refinement
+### Step 03: Refinement
 
 Inputs:
-(a) simple_motif_diffusion_output.pdb - PDB file of CA trace produced by RFdiffusion in step02a.
+(a) PDB file of CA trace produced by RFdiffusion in step 02.
+(b) TRB file generated in step 02
 
 Outputs:
 PDB file of refined diffusion output.
 
-### Step 02c: Search for positions that accomodate new catalytic elements
+### Step 04: Search for positions that accomodate new catalytic elements
 
-In this case we search a backbone for positions in which an acceptor Asp/Glu can make an H-bond with atom ND1 of the catalytic histidine.
+We search a backbone for positions from which a donor sidechain can make an H-bond with atom O1 (oxyanion) in the substrate (command 1), OR for positions from which an acceptor Asp/Glu can make an H-bond with atom ND1 of the catalytic histidine (command 2). We ensure that these positions are not overly close to other catalytic residues in sequence and are on secondary structure elements.
 
 Inputs:
-(a) Refined diffusion output.
-TODO: finish this
+(a) Refined diffusion output
+(b) Constraint files that define the geometry of H-bond interactions between each donor/acceptor sidechain
+
+Outputs:
+(a) PDB files containing the input PDB file with the desired acceptor/donor residue mutated in a position that can accomodate an H-bond to the target atom. If no position was found, nothing is output.
 
 ## B. Design Pipeline
 
@@ -61,7 +67,7 @@ New backbones are generated that contain the input active site.
 
 Inputs:
 (a) PDB file of input motif
-(b) Contig input (TODO)
+(b) JSON file containing arguments for RFdiffusion. For details see Methods and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
 
 Outputs:
 (a) PDB file of diffused CA trace and motif
@@ -72,26 +78,26 @@ Outputs:
 The backbones generated in step 1 are only CA traces. Refinement generates all-atom models from the CA trace which can then be input to LigandMPNN and Rosetta. Refinement uses the RFdiffusion runscript in a different mode, and outputs the refined PDB files into the same directory as the CA traces.
 
 Inputs:
-(a) PDB file of diffused CA trace
-(b) TRB file for diffused CA trace
+(a) PDB file of diffused CA trace (from Step 01)
+(b) TRB file for diffused CA trace (from Step 01)
 
 Outputs:
-PDB file of refined all-atom RFdiffusion output
+(a) PDB file of refined all-atom RFdiffusion output
 
 ### Step 03: Design with LigandMPNN+FastRelax
 
 The sequences of RFdiffusion outputs are designed with LigandMPNN, then relaxed using Rosetta with enzyme constraints to hold the active site in place. The process is repeated three times.
 
 Inputs:
-(a) PDB file of refinement output, or an existing design model if performing sequence resampling.
-(b) Rosetta enzyme constraint file specifying desired interaction geometries in active site.
-(c) Rosetta params file of substrate.
-(d) Locations of catalytic residues in sequence.
-TODO
+(a) PDB file of refinement output, or an existing design model if performing sequence resampling
+(b) Rosetta enzyme constraint file specifying desired interaction geometries in active site
+(c) Rosetta params file of substrate
+(d) Locations of catalytic residues in sequence
+(e) Additional arguments described in scripts/design.py
 
 Outputs:
-(a) PDB file of design output.
-(b) CSV file containing design scores.
+(a) PDB file of design output
+(b) CSV file containing design scores
 
 ### Step 04: Structural validation with AlphaFold2
 
@@ -130,5 +136,16 @@ Outputs:
 (a) PDB file containing ChemNet ensemble
 (b) CSV file containing additional metrics from ChemNet
 
+### Step 07: Analyze ChemNet outputs
+
+The ChemNet ensemble output in Step 06 is analyzed for interaction geometries. Interactions are evaluated for the presence of H-bonds. The analysis results in a CSV file containing all metrics from each prediction in the ensemble.
+
+Inputs:
+(a) PDB file containing ChemNet ensemble (Step 06)
+(b) CSV file containing additional metrics from ChemNet (Step 06)
+(c) Catalytic intermediate being modeled in ChemNet ensemble (--step)
+
+Outputs:
+(a) CSV file containing measured geometries, H-bonding info, and additional metrics for each prediction in ensemble
 
 
