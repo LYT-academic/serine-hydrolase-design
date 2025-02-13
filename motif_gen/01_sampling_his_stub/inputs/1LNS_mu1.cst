@@ -1,0 +1,61 @@
+# Lauko, Pellock, & Sumida, Baker Lab, UW
+# Serine hydrolase, attacking OP probe (R isomer, anti attack)
+
+# Sources:
+# ---------------------------------------------------------------------
+# Sarin TS 'phos_2', Houk lab
+# ‘Hilvert paper’ -- https://pubs.acs.org/doi/10.1021/ja803213p
+# ‘PNAS paper’ -- https://www.pnas.org/content/pnas/110/8/E653.full.pdf
+
+
+# 1B Serine attack on carbonyl carbon of 4-MUAc substrate
+
+CST::BEGIN
+
+  TEMPLATE::   ATOM_MAP: 1 atom_name: C1 O1 O2
+  TEMPLATE::   ATOM_MAP: 1 residue3:  mu1
+
+  TEMPLATE::   ATOM_MAP: 2 atom_type: OH
+  TEMPLATE::   ATOM_MAP: 2 residue3: SER
+
+  CONSTRAINT:: distanceAB:    1.5   0.1   100.  1    0
+  CONSTRAINT::    angle_A:   93.5  10.0   50.0  360. 0
+  CONSTRAINT::    angle_B:  127.9  20.0   50.0  360. 0
+  CONSTRAINT::  torsion_A: -119.5  20.0   50.0  360. 0
+  CONSTRAINT:: torsion_AB:   40.3  20.0   50.0  360. 0
+  CONSTRAINT::  torsion_B: -132.7  40.0   50.0  360. 0
+
+  ALGORITHM_INFO:: match
+        IGNORE_UPSTREAM_PROTON_CHI
+  ALGORITHM_INFO::END
+
+CST::END
+
+
+#######################################################################
+# CST 2 | serine<->histidine interaction                              #
+#######################################################################
+
+# derived mainly from Hilvert paper; both crystal structure analysis and QM calculations
+
+CST::BEGIN
+    TEMPLATE::  ATOM_MAP: 1 atom_type: OH
+    TEMPLATE::  ATOM_MAP: 1 residue3:  SER
+    
+    TEMPLATE::  ATOM_MAP: 2 atom_name: NE2 CE1 ND1
+    TEMPLATE::  ATOM_MAP: 2 residue3:  HIS
+    
+    CONSTRAINT:: distanceAB:     3.0   0.2  100    0  0
+    CONSTRAINT::    angle_A:   140.0  20.0   50  360. 2
+    CONSTRAINT::    angle_B:   120.0  40.0   50  360. 4 # was 100+/-30
+    CONSTRAINT::  torsion_A:   140.0  40.0   25  360. 3
+    CONSTRAINT:: torsion_AB:    90.0  25.0    0  180. 2
+    CONSTRAINT::  torsion_B:   180.0  20.0   25  180. 0
+
+    ALGORITHM_INFO:: match
+        SECONDARY_MATCH: UPSTREAM_CST 1
+        IGNORE_UPSTREAM_PROTON_CHI
+        MAX_DUNBRACK_ENERGY 5.0
+    ALGORITHM_INFO::END
+CST::END
+

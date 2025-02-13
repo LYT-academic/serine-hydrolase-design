@@ -1,0 +1,4 @@
+[2024-09-04 16:59:59,735][inference.model_runners][INFO] - Reading checkpoint from ../../software/ca_rf_diffusion/checkpoints/BFF_7.pt
+[2024-09-04 17:00:29,215][inference.model_runners][INFO] - Loading checkpoint.
+[2024-09-04 17:00:30,419][__main__][INFO] - Making design outputs/out_1
+[2024-09-04 17:00:30,421][__main__][INFO] - (cautious mode) Skipping this design because outputs/out_1.pdb already exists.

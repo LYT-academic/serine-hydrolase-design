@@ -1,0 +1,110 @@
+# serine attack
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: C1 O1 O2
+    TEMPLATE::   ATOM_MAP: 1 residue3:  bn1
+
+    TEMPLATE::   ATOM_MAP: 2 atom_name: OG CB CA
+    TEMPLATE::   ATOM_MAP: 2 residue1:  S
+
+    CONSTRAINT:: distanceAB:     1.5  0.1  100    1  1
+    CONSTRAINT::    angle_A:   105.3  5.0   50  360. 1
+    CONSTRAINT::    angle_B:   127.3  5.0   50  360. 1
+    CONSTRAINT::  torsion_A:  -105.5  5.0   50  360. 1
+    CONSTRAINT:: torsion_AB:    31.1  5.0   50  360. 1
+    CONSTRAINT::  torsion_B:  -133.4  5.0   50  360. 1
+
+CST::END
+
+# oxyanion hole
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: O1 C1 O2
+    TEMPLATE::   ATOM_MAP: 1 residue3:  bn1
+
+    TEMPLATE::   ATOM_MAP: 2 atom_name: N CA C
+    TEMPLATE::   ATOM_MAP: 2 residue1:  ACDEFGHIKLMNQRSTVWY
+
+    CONSTRAINT:: distanceAB:     2.8  0.1  100    0  1
+    CONSTRAINT::    angle_A:   108.7  5.0   50  360. 1
+    CONSTRAINT::    angle_B:   111.5  5.0   50  360. 1
+    CONSTRAINT::  torsion_A:   135.8  5.0   50  360. 1
+    CONSTRAINT:: torsion_AB:   135.9  5.0   50  360. 1
+    CONSTRAINT::  torsion_B:   141.9  5.0   50  360. 1
+    ALGORITHM_INFO:: match
+         SECONDARY_MATCH: DOWNSTREAM
+    ALGORITHM_INFO::END
+CST::END
+
+# ser-his stabilization
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: OG CB CA
+    TEMPLATE::   ATOM_MAP: 1 residue3:  SER
+
+    TEMPLATE::   ATOM_MAP: 2 atom_name: NE2 CE1 ND1
+    TEMPLATE::   ATOM_MAP: 2 residue1:  HIS
+
+    CONSTRAINT:: distanceAB:     2.8  0.1  100    0  1
+    CONSTRAINT::    angle_A:   138.9  5.0   50  360. 1
+    CONSTRAINT::    angle_B:    90.4  5.0   50  360. 1
+    CONSTRAINT::  torsion_A:    99.9  5.0   50  360. 1
+    CONSTRAINT:: torsion_AB:   -64.9  5.0   50  360. 1
+    CONSTRAINT::  torsion_B:  -179.6  5.0   50  360. 1
+    ALGORITHM_INFO:: match
+         SECONDARY_MATCH: DOWNSTREAM
+    ALGORITHM_INFO::END
+CST::END
+
+# LG stabilization
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: O2 C1 O1
+    TEMPLATE::   ATOM_MAP: 1 residue3:  bn1
+
+    TEMPLATE::   ATOM_MAP: 2 atom_name: NE2 CE1 ND1
+    TEMPLATE::   ATOM_MAP: 2 residue1:  HIS
+
+    CONSTRAINT:: distanceAB:     2.6  0.1  100    0  1
+    CONSTRAINT::    angle_A:    93.7  5.0   50  360. 1
+    CONSTRAINT::    angle_B:   134.7  5.0   50  360. 1
+    CONSTRAINT::  torsion_A:  -173.2  5.0   50  360. 1
+    CONSTRAINT:: torsion_AB:    58.1  5.0   50  360. 1
+    CONSTRAINT::  torsion_B:   167.7  5.0   50  360. 1
+    ALGORITHM_INFO:: match
+         SECONDARY_MATCH: DOWNSTREAM
+    ALGORITHM_INFO::END
+CST::END
+
+
+# His-Asp
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: ND1 CG CB
+    TEMPLATE::   ATOM_MAP: 1 residue3:  HIS
+
+    TEMPLATE::   ATOM_MAP: 2 atom_type: OOC
+    TEMPLATE::   ATOM_MAP: 2 residue1:  ED
+
+    CONSTRAINT:: distanceAB:     2.5  0.3  100    0  1
+    CONSTRAINT::    angle_A:   120.0 25.0   50  360. 1
+    CONSTRAINT::    angle_B:   120.0 25.0   50  360. 1
+    CONSTRAINT::  torsion_A:     0.0 25.0   50  360. 1
+    ALGORITHM_INFO:: match
+         SECONDARY_MATCH: DOWNSTREAM
+    ALGORITHM_INFO::END
+CST::END
+
+# oxyanion hole 2
+CST::BEGIN
+    TEMPLATE::   ATOM_MAP: 1 atom_name: O1 C1 O2
+    TEMPLATE::   ATOM_MAP: 1 residue3:  bn1
+
+    TEMPLATE::   ATOM_MAP: 2 atom_name: N CA C
+    TEMPLATE::   ATOM_MAP: 2 residue1:  ACDEFGHIKLMNQRSTVWY
+
+    CONSTRAINT:: distanceAB:     3.5  0.1  100    0  1
+    CONSTRAINT::    angle_A:   143.9  5.0   50  360. 1
+    CONSTRAINT::    angle_B:   112.5  5.0   50  360. 1
+    CONSTRAINT::  torsion_A:     5.6  5.0   50  360. 1
+    CONSTRAINT:: torsion_AB:   -87.2  5.0   50  360. 1
+    CONSTRAINT::  torsion_B:   109.7  5.0   50  360. 1
+    ALGORITHM_INFO:: match
+         SECONDARY_MATCH: DOWNSTREAM
+    ALGORITHM_INFO::END
+CST::END

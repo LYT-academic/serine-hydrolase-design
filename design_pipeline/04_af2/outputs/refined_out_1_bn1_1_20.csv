@@ -1,0 +1,2 @@
+mean_plddt,plddt_binder,plddt_target,pae_binder,pae_target,pae_interaction,time,contacts,rmsd_to_input,pdb_path,input_pdb
+81.41755993739837,81.41755993739837,,6.2478733,,,137.8063835259527,20,1.030521273612976,outputs//refined_out_1_bn1_1_20.pdb,inputs/refined_out_1_bn1_1.pdb

@@ -1,0 +1,14 @@
+CST::BEGIN
+
+    TEMPLATE::   ATOM_MAP: 1 atom_name: O1 C1 O2
+    TEMPLATE::   ATOM_MAP: 1 residue3:  mu2
+
+    TEMPLATE::   ATOM_MAP: 2 atom_type: NH2O
+    TEMPLATE::   ATOM_MAP: 2 residue1:  NQ
+
+    CONSTRAINT:: distanceAB:     2.8  0.5  100    0  1
+    CONSTRAINT::    angle_B:   120.0   30  100  360  1
+    CONSTRAINT::  torsion_B:   180.0   30  100  180  1
+
+CST::END
+
