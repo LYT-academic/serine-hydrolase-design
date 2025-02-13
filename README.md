@@ -32,7 +32,7 @@ RFdiffusion to generate new backbones around a simple motif.
 
 Inputs:
 (a) PDB file produced in Step 01 containing substrate, catalytic serine, and histidine.
-(b) JSON file containing arguments for RFdiffusion. For details see Methods and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
+(b) JSON file containing arguments for RFdiffusion. For further details see Methods, Supplementary Information, and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
 
 Outputs:
 (a) PDB file of diffusion backbone CA trace
@@ -51,7 +51,7 @@ PDB file of refined diffusion output.
 
 ### Step 04: Search for positions that accomodate new catalytic elements
 
-We search a backbone for positions from which a donor sidechain can make an H-bond with atom O1 (oxyanion) in the substrate (command 1), OR for positions from which an acceptor Asp/Glu can make an H-bond with atom ND1 of the catalytic histidine (command 2). We ensure that these positions are not overly close to other catalytic residues in sequence and are on secondary structure elements.
+We search a backbone for positions from which a donor sidechain can make an H-bond with atom O1 (oxyanion) in the substrate (command 1), OR for positions from which an acceptor Asp/Glu can make an H-bond with atom ND1 of the catalytic histidine (command 2). We ensure that these positions are not overly close to other catalytic residues in sequence and are on secondary structure elements. Any successful matches become motifs for further backbone generation, this successively building up active site complexity. 
 
 Inputs:
 (a) Refined diffusion output
@@ -62,7 +62,7 @@ Outputs:
 
 ## B. Design Pipeline
 
-With motif(s) in hand, we move on to design, which consists of RFdiffusion starting from the motif, refinement of the diffusion outputs, sequence design with LigandMPNN+FastRelax, structural validation with AlphaFold2, multi-step Chemnet prediction, and analysis of Chemnet outputs.
+With motif(s) in hand, we move on to design, which consists of RFdiffusion starting from the motif, refinement of the diffusion outputs, sequence design with LigandMPNN+FastRelax, structural validation with AlphaFold2, multi-step PLACER prediction, and analysis of PLACER outputs.
 
 ### Step 01: CA RFdiffusion
 
@@ -70,7 +70,7 @@ New backbones are generated that contain the input active site.
 
 Inputs:
 (a) PDB file of input motif
-(b) JSON file containing arguments for RFdiffusion. For details see Methods and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
+(b) JSON file containing arguments for RFdiffusion. For further details see Methods, Supplementary Information and [Watson et al.](https://www.nature.com/articles/s41586-023-06415-8)
 
 Outputs:
 (a) PDB file of diffused CA trace and motif
@@ -117,7 +117,7 @@ Outputs:
 
 ### Step 05: Copy substrate from design into AlphaFold2 model
 
-To prepare AlphaFold2 predictions for the ChemNet runscript, we need to add the substrate from the design model roughly into the active site. Using the above AlphaFold2 scripts, the predictions should already be aligned onto the design model, making this simply a question of copying the substrate coordinates from one file to another.
+To prepare AlphaFold2 predictions for the PLACER runscript, we need to add the substrate from the design model roughly into the active site. Using the above AlphaFold2 scripts, the predictions should already be aligned onto the design model, making this simply a question of copying the substrate coordinates from one file to another.
 
 Inputs:
 (a) PDB file of design model containing substrate
@@ -126,9 +126,9 @@ Inputs:
 Outputs:
 (a) PDB file of AlphaFold2 prediction containing substrate
 
-### Step 06: Run ChemNet
+### Step 06: Run PLACER
 
-We run ChemNet in each of 5 modes representing the 5 intermediates along the reaction coordinate (apo, substrate-bound, tetrahedral intermediate 1 (T1), acylenzyme intermediate (AEI), tetrahedral intermediate 2 (T2)).
+We run PLACER in each of 5 modes representing the 5 intermediates along the reaction coordinate (apo, substrate-bound, tetrahedral intermediate 1 (T1), acylenzyme intermediate (AEI), tetrahedral intermediate 2 (T2)).
 
 Inputs:
 (a) PDB file of AlphaFold2 prediction containing substrate
@@ -136,17 +136,17 @@ Inputs:
 (c) Number of models in output ensemble
 
 Outputs:
-(a) PDB file containing ChemNet ensemble
-(b) CSV file containing additional metrics from ChemNet
+(a) PDB file containing PLACER ensemble
+(b) CSV file containing additional metrics from PLACER
 
-### Step 07: Analyze ChemNet outputs
+### Step 07: Analyze PLACER outputs
 
-The ChemNet ensemble output in Step 06 is analyzed for interaction geometries. Interactions are evaluated for the presence of H-bonds. The analysis results in a CSV file containing all metrics from each prediction in the ensemble.
+The PLACER ensemble output in Step 06 is analyzed for interaction geometries. Interactions are evaluated for the presence of H-bonds. The analysis results in a CSV file containing all metrics from each prediction in the ensemble. The script used for this step is highly tailored specifically for analysis of serine hydrolase interactions in PLACER outputs, but the code can be repurposed to evaluate H-bonds or catalytic residue conformations for a different enzyme.
 
 Inputs:
-(a) PDB file containing ChemNet ensemble (Step 06)
-(b) CSV file containing additional metrics from ChemNet (Step 06)
-(c) Catalytic intermediate being modeled in ChemNet ensemble (--step)
+(a) PDB file containing PLACER ensemble (Step 06)
+(b) CSV file containing additional metrics from PLACER (Step 06)
+(c) Catalytic intermediate being modeled in PLACER ensemble (flag: --step)
 
 Outputs:
 (a) CSV file containing measured geometries, H-bonding info, and additional metrics for each prediction in ensemble
