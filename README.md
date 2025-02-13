@@ -11,8 +11,8 @@ Our manuscript describes the de novo design of serine hydrolases, which we perfo
 ## Requirements:  
 (a) CA RFdiffusion  
 (b) [LigandMPNN](https://github.com/dauparas/LigandMPNN)  
-(c) [Superfold](https://github.com/rdkibler/superfold) or [Initial Guess AF2](https://github.com/nrbennet/dl_binder_design)
-(e) [PLACER](https://github.com/baker-laboratory/PLACER)  
+(c) [Superfold](https://github.com/rdkibler/superfold) or [Initial Guess AF2](https://github.com/nrbennet/dl_binder_design)  
+(d) [PLACER](https://github.com/baker-laboratory/PLACER)  
 
 ## A. Motif Generation
 RFdiffusion takes as input motifs consisting of "stubs" that hold the catalytic residues. To avoid constraining design to existing serine hydrolase active sites, we generate our own.
