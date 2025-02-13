@@ -11,7 +11,7 @@ Our manuscript describes the de novo design of serine hydrolases, which we perfo
 ## Requirements:  
 (a) CA RFdiffusion  
 (b) [LigandMPNN](https://github.com/dauparas/LigandMPNN)  
-(c) [Superfold](https://github.com/rdkibler/superfold)  
+(c) [Superfold](https://github.com/rdkibler/superfold) or [Initial Guess AF2](https://github.com/nrbennet/dl_binder_design)
 (e) [PLACER](https://github.com/baker-laboratory/PLACER)  
 
 ## A. Motif Generation
