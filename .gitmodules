@@ -1,0 +1,3 @@
+[submodule "scripts/invrotzyme"]
+	path = scripts/invrotzyme
+	url = https://github.com/ikalvet/invrotzyme.git
