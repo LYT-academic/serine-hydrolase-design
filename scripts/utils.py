@@ -9,8 +9,6 @@ import string
 import math
 
 sys.path.append("../../software")
-from crispy_shifty.protocols import mpnn
-from crispy_shifty.protocols.mpnn import MPNNDesign, MPNNLigandDesign
 from pyrosetta.rosetta.core.select.residue_selector import (
     AndResidueSelector,
     ChainSelector,
@@ -355,68 +353,6 @@ def remove_pose_matcher_lines(pose):
     pyrosetta.rosetta.core.import_pose.pose_from_pdbstring(pose2, "\n".join(new_pdb))
     return pose2
 
-def mpnn(pose, design, ligand, params=None, omit_aas='CX', global_polar_bias=False, 
-            bias_by_res=False, omitAA_by_res=False, temperature=0.1):
-    print('Starting MPNN.')
-    # design is string of comma separated residues be designed
-    print(f'designing residues {design}')
-    
-    if not params:
-        ligand_params = f'/home/laukoa/Projects/serine_hydrolase/theozyme/{ligand}/{ligand}.params'
-    else:
-        ligand_params = params
-
-    # remove pdb info
-    pose = remove_pose_matcher_lines(pose)
-    chA, chB = list(pose.split_by_chain())[0], list(pose.split_by_chain())[1]
-
-    design_selector = ResidueIndexSelector(design)
-
-    # configure additional arguments
-    args = {}
-    if global_polar_bias:
-        args['--bias_AA_jsonl'] = '/home/laukoa/Projects/serine_hydrolase/230404_esterase_motifs/scripts/polar_bias.jsonl'
-    if bias_by_res:
-        args['--bias_by_res_jsonl'] = bias_by_res
-    if omitAA_by_res:
-        args['--omit_AA_jsonl'] = omitAA_by_res
-
-    # MPNN Design
-    chA_selector = ChainSelector("A")
-    mpnn_design = MPNNLigandDesign(
-        design_selector=design_selector,
-        params=ligand_params,
-        omit_AAs=omit_aas,
-        temperature=temperature,
-        num_sequences=1,
-        batch_size=1,
-        checkpoint_path='/databases/mpnn/ligand_mpnn_model_weights/s25_r010_t300_p.pt'
-        )
-    mpnn_design.update_flags(args)
-
-    # run the mpnn!
-    mpnn_design.apply(pose)
-    mpnn_seqs = {k: v for k, v in pose.scores.items() if "mpnn_seq" in k}
-
-    final_pose = pyrosetta.rosetta.core.pose.Pose()
-    pyrosetta.rosetta.core.pose.append_pose_to_pose(final_pose, chA, new_chain=True)
-    pyrosetta.rosetta.core.pose.append_pose_to_pose(final_pose, chB, new_chain=True)
-
-    # add the mpnn sequences to the final pose
-    #for k, v in mpnn_seqs.items():
-    #    pyrosetta.rosetta.core.pose.setPoseExtraScore(final_pose, k, v)
-    for k, v in pose.scores.items(): #assuming `pose` had `apply` called on it
-        pyrosetta.rosetta.core.pose.setPoseExtraScore(final_pose, k, v)
-
-    # add pdb_info to final_pose
-    pdb_info = pose.pdb_info()
-    final_pose.pdb_info(pdb_info)
-
-    # return the first pose
-    mpnn_poses = mpnn_design.generate_all_poses(final_pose, include_native=False)
-    for j, mpnn_pose in enumerate(mpnn_poses):
-        #mpnn_pose = add_matcher_lines_to_pose(p, catres, ligand)
-        return mpnn_pose
 
 def load_diffusion_pose(pdb):
     """

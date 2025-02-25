@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys, os, glob, json, time
+import sys, os, glob, json, time, shutil
 import pandas as pd
 import numpy as np
 import argparse 
@@ -49,7 +49,6 @@ parser.add_argument("--upweight_nonpolars_near_ligand", action='store_true', def
 parser.add_argument("--downweight_activesite_arg", action='store_true', default=False, help="Downweight arginines in the active site.")
 parser.add_argument("--find_hbonds_to_oxyanion", action='store_true', default=False, help="If an oxyanion hbond shows up, fix it during MPNN cycling.")
 parser.add_argument("--upweight_polars_near_acid", action='store_true', default=False, help="Upweight polar residues near the acid residue")
-parser.add_argument("--use_polar_bias_for_design", action='store_true', default=False, help="Add global polar bias in design stage")
 parser.add_argument("--lg_his_constraint", action='store_true', default=False, help="Want to constrain his-lg distance (cst file must have constraint)")
 
 # choose 1 if applicable, both are not applied simultaneously
@@ -74,6 +73,11 @@ import pyrosetta.distributed.tasks.rosetta_scripts as rosetta_scripts
 import utils
 import hbond_utils
 import geometry
+
+script_path = sys.argv[0]
+script_dir = os.path.abspath('/'.join(script_path.split('/')[:-1]))
+repo_dir = os.path.dirname(script_dir)
+mpnn_dir = f'{repo_dir}/software/LigandMPNN'
 
 if args.params:
     params = args.params
@@ -920,15 +924,24 @@ for n in range(args.startnum, args.startnum+args.nstruct):
         with open(bias_json, 'w') as f:
             json.dump({"tmp":{"A": bias.tolist()}}, f)
 
-        # start running mpnn
-        pose = utils.mpnn(pose, 
-                          ','.join([str(x) for x in mpnn_design_res]), 
-                          args.ligand,
-                          params=params,
-                          global_polar_bias=args.use_polar_bias_for_design,
-                          bias_by_res=bias_json,
-                          omitAA_by_res=omitAA_json,
-                          temperature=args.mpnn_temperature)
+        # dump pdb for mpnn
+        tmp_pdb = f'{args.odir}/TMP_{outprefix}{inpdb_name}_{args.ligand}_{n}{args.outsuffix}.pdb'
+        pose.dump_pdb(tmp_pdb)
+
+        # run mpnn
+        redesigned_residues = ' '.join([f'A{i}' for i in mpnn_design_res])
+        mpnn_cmd = f"""python {mpnn_dir}/run.py \
+                              --pdb_path {tmp_pdb} \
+                              --out_folder {args.odir} \
+                              --model_type ligand_mpnn \
+                              --checkpoint_ligand_mpnn ../../software/LigandMPNN/model_params/ligandmpnn_v_32_010_25.pt \
+                              --redesigned_residues "{redesigned_residues}" \
+                              --bias_AA_per_residue {bias_json} \
+                              --temperature {args.mpnn_temperature}"""
+        if os.path.exists(omitAA_json):
+            mpnn_cmd += ' --omit_AA_per_residue {omitAA_json} '
+        os.system(mpnn_cmd+'\n')
+        pose = pyrosetta.pose_from_file(f'{args.odir}/backbones/TMP_{outprefix}{inpdb_name}_{args.ligand}_{n}{args.outsuffix}_1.pdb')
 
         # fastrelax with enzyme constraints
         pose = add_matcher_lines_to_pose(pose, catres, args.ligand, lg_his=args.lg_his_constraint)
@@ -993,13 +1006,15 @@ for n in range(args.startnum, args.startnum+args.nstruct):
     save_scores(scores, outjson)
 
     # clean up json files
-    try:
-        if args.cleanup_jsons:
-            os.remove(omitAA_json)
-            os.remove(bias_json)
-    except Exception as e:
-        print('something weird happened in the cleanup process.')
-
+    if args.cleanup_jsons:
+        files_to_delete = [omitAA_json, bias_json, tmp_pdb]
+        dirs_to_delete = [f'{args.odir}/backbones', f'{args.odir}/seqs']
+        for f in files_to_delete:
+            if os.path.exists(f):
+                os.remove(f)
+        for d in dirs_to_delete:
+            if os.path.exists(d):
+                shutil.rmtree(d)
 
     t1 = time.time()
     print(f'Finished making design number {n} in {round(t1-t0)} seconds')
