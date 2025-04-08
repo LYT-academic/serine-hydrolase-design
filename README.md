@@ -14,6 +14,20 @@ Our manuscript describes the de novo design of serine hydrolases, which we perfo
 (c) [Superfold](https://github.com/rdkibler/superfold) or [Initial Guess AF2](https://github.com/nrbennet/dl_binder_design)  
 (d) [PLACER](https://github.com/baker-laboratory/PLACER)  
 
+## Set up
+After cloning the repository, run the following to clone the submodules.
+```
+git submodule init 
+git submodule update
+```
+
+The Conda environment found in `env` should contain all of the required python packages to excecute all scripts in the repository (a previous version of this repository contained multiple Apptainer containers, but we have swapped this for ease of use). To build and activate the environment, [install Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html), then run the following:
+
+```
+conda env create -f env/diffusion.yml
+conda activate my_env
+```
+
 ## A. Motif Generation
 RFdiffusion takes as input motifs consisting of "stubs" that hold the catalytic residues. To avoid constraining design to existing serine hydrolase active sites, we generate our own.
 
