@@ -4,8 +4,6 @@ Code repository for de novo design of serine hydrolases, to accompany the manusc
 
 Lauko A, Pellock SJ, Sumida KH. 2025. Computational design of serine hydrolases. *Science* doi: [10.1101/2024.08.29.610411](https://doi.org/10.1126/science.adu2454)
 
-Installing [Apptainer](https://apptainer.org/docs/admin/main/installation.html) will allow you to run all code using the pre-packaged python environments found in `containers/`.
-
 Our manuscript describes the de novo design of serine hydrolases, which we performed in two phases: motif generation and design. This code repository is organized such that each substep of motif generation and design (described below) can be run individually with example inputs and outputs found in the `inputs/` and `outputs/` subdirectories. To run, navigate into the numbered folder within `motif_gen/` or `design_pipeline/` and run the command(s) in `cmd.sh`.
 
 ## Requirements:  
