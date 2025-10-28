@@ -13,3 +13,6 @@
 [submodule "software/dl_binder_design"]
 	path = software/dl_binder_design
 	url = https://github.com/nrbennet/dl_binder_design.git
+[submodule "software/ca_rf_diffusion"]
+	path = software/ca_rf_diffusion
+	url = https://github.com/baker-laboratory/CA_RFDiffusion.git

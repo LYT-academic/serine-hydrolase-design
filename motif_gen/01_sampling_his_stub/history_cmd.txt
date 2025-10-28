@@ -1,0 +1,93 @@
+# 2025-10-23 11:38 a.m.
+module load singularity/3.9.6 cuda/12.2u2 compiler/nvhpc/23.11
+srun -p cluster_intr --pty bash -l  # apply for cpu
+cd ~/serine-hydrolase-design/motif_gen/01_sampling_his_stub
+singularity exec ~/serine-hydrolase-design/env/diffusion.sif bash cmd.sh 
+
+>>>>>>>>>>>>>>>>>>>>RUN RESULT>>>>>>>>>>>>>>>>>>>>>>>>
+
+source: /opt/conda/envs/diffusion/etc/conda/activate.d/activate-binutils_linux-64.sh:8:18: parameter expansion requires a literal
+source: /opt/conda/envs/diffusion/etc/conda/activate.d/activate-gcc_linux-64.sh:10:40: parameter expansion requires a literal
+source: /opt/conda/envs/diffusion/etc/conda/activate.d/activate-gxx_linux-64.sh:10:40: parameter expansion requires a literal
+cuda-nvcc: Please add the `compiler("c")` and `compiler("cxx")` packages to the environment.
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                 PyRosetta-4                                  │
+│              Created in JHU by Sergey Lyskov and PyRosetta Team              │
+│              (C) Copyright Rosetta Commons Member Institutions               │
+│                                                                              │
+│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRE PURCHASE OF A LICENSE │
+│         See LICENSE.PyRosetta.md or email license@uw.edu for details         │
+└──────────────────────────────────────────────────────────────────────────────┘
+PyRosetta-4 2024 [Rosetta PyRosetta4.conda.linux.cxx11thread.serialization.CentOS.python310.Release 2024.39+release.59628fbc5bc09f1221e1642f1f8d157ce49b1410 2024-09-23T07:49:48] retrieved from: http://www.pyrosetta.org
+core.init: Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: Rosetta version: PyRosetta4.conda.linux.cxx11thread.serialization.CentOS.python310.Release r387 2024.39+release.59628fb 59628fbc5bc09f1221e1642f1f8d157ce49b1410 http://www.pyrosetta.org 2024-09-23T07:49:48
+core.init: Rosetta extras: [cxx11thread, serialization]
+core.init: command: PyRosetta -extra_res_fa ../inputs/mu1.params -run:preserve_header -database /opt/conda/envs/diffusion/lib/python3.10/site-packages/pyrosetta/database
+basic.random.init_random_generator: 'RNG device' seed mode, using '/dev/urandom', seed=1557788669 seed_offset=0 real_seed=1557788669 thread_index=0
+basic.random.init_random_generator: RandomGenerator:init: Normal mode, seed=1557788669 RG_type=mt19937
+core.chemical.GlobalResidueTypeSet: Finished initializing fa_standard residue type set.  Created 986 residue types
+core.chemical.GlobalResidueTypeSet: Total time to initialize 0.961764 seconds.
+protocols.toolbox.match_enzdes_util.EnzConstraintIO: read enzyme constraints from ../inputs/1LNS_mu1.cst ... done, 2 cst blocks were read.
+Using CHI sampling levels for CST's:
+    CST 1 :: {1: 0, 2: 0, 3: 0, 4: 0}
+    CST 2 :: {1: 0, 2: 0, 3: 0, 4: 0}
+core.import_pose.import_pose: File '../inputs/1LNS.pdb' automatically determined to be of type PDB
+core.conformation.Conformation: [ WARNING ] missing heavyatom:  OXT on residue ALA:CtermProteinFull 3
+core.pack.task: Packer task: initialize from command line() 
+core.pack.rotamers.SingleLigandRotamerLibrary: Read in 14 rotamers from ../inputs/mu1_conformers.pdb !
+core.pack.rotamers.SingleLigandRotamerLibrary: Added 14 rotamers for mu1
+core.pack.dunbrack.RotamerLibrary: shapovalov_lib_fixes_enable option is true.
+core.pack.dunbrack.RotamerLibrary: shapovalov_lib::shap_dun10_smooth_level of 1( aka lowest_smooth ) got activated.
+core.pack.dunbrack.RotamerLibrary: Binary rotamer library selected: /opt/conda/envs/diffusion/lib/python3.10/site-packages/pyrosetta/database/rotamer/shapovalov/StpDwn_0-0-0/Dunbrack10.lib.bin
+core.pack.dunbrack.RotamerLibrary: Using Dunbrack library binary file '/opt/conda/envs/diffusion/lib/python3.10/site-packages/pyrosetta/database/rotamer/shapovalov/StpDwn_0-0-0/Dunbrack10.lib.bin'.
+core.pack.dunbrack.RotamerLibrary: Dunbrack 2010 library took 1.17643 seconds to load from binary
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 54 bbindependent rotamers for Residue SER.
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 54 inverse rotamers were created for restype SER.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: When initializing a node for geomcst 1, 0 of a total of 54 inverse rotamers were found to clash with something.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: Node initialization for geomcst 1. After redundancy determination, 1 non-redundant sets of inverse rotamers exist.
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 14 bbindependent rotamers for Residue HIS.
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 88200 inverse rotamers were created for restype HIS.
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 14 bbindependent rotamers for Residue HIS_D.
+protocols.toolbox.match_enzdes_util.MatchConstraintFileIfo: 88200 inverse rotamers were created for restype HIS_D.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: When initializing a node for geomcst 2, 159404 of a total of 176400 inverse rotamers were found to clash with something.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: Node initialization for geomcst 1. After child node initialization, 1 non-redundant sets of inverse rotamers exist.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: 54 inverse rotamers for non-redundant set 1
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: Collecting inverse rotamers for a node from geomcst 1. 1 empty parent collectors and 0 filled parent collectors were found.
+protocols.toolbox.match_enzdes_util.InvrotTreeNode: Collecting inverse rotamers for a node from geomcst 2. 1 empty parent collectors and 0 filled parent collectors were found.
+1 rotamer sets to process
+Non-redundant rotamer set 1
+CST 0: 14 inverse rotamers.
+CST 1: 54 inverse rotamers.
+CST 2: 16996 inverse rotamers.
+CST 1: 3 inverse rotamers after pruning for proton-chi
+Preselecting inverse rotamers for motif alignment, based on unique CST subsampling
+    CST 1, 1/3 after unique selection
+RMSD between atoms:  0.012105912175871503
+Preselecting inverse rotamers based on Dunbrack probability
+Picking a random subset of inverse rotamers
+CST 0: 5 inverse rotamers after filtering.
+CST 1: 1 inverse rotamers after filtering.
+CST 2: 5 inverse rotamers after filtering.
+25 configurations to process
+Starting to generate inverse rotamer assemblies using 1 parallel processes.
+Found good rotamer: mu1_1LNS_H_1_0
+Found good rotamer: mu1_1LNS_H_1_1
+Found good rotamer: mu1_1LNS_H_1_2
+Found good rotamer: mu1_1LNS_H_1_3
+Found good rotamer: mu1_1LNS_H_1_4
+Found good rotamer: mu1_1LNS_H_1_15
+Found good rotamer: mu1_1LNS_H_1_16
+Found good rotamer: mu1_1LNS_H_1_17
+Found good rotamer: mu1_1LNS_H_1_18
+Found good rotamer: mu1_1LNS_H_1_19
+Found good rotamer: mu1_1LNS_H_1_20
+Found good rotamer: mu1_1LNS_H_1_21
+Found good rotamer: mu1_1LNS_H_1_22
+Found good rotamer: mu1_1LNS_H_1_23
+Found good rotamer: mu1_1LNS_H_1_24
+Bad rotamers from set 1:
+   CST 0: []
+   CST 1: []
+   CST 2: []
+Processing all the rotamers in set 1 took 0.72 seconds
+
