@@ -1,0 +1,23 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%files
+    diffusion.yml /diffusion.yml
+
+%post
+    # 在构建时执行
+    export CONDA_OVERRIDE_CUDA=12.1
+    conda env create -f /diffusion.yml
+    conda clean -afy
+    echo "source activate diffusion" >> ~/.bashrc
+
+%environment
+    # 容器启动时的环境变量
+    export PATH=/opt/conda/envs/diffusion/bin:$PATH
+    source /opt/conda/etc/profile.d/conda.sh
+    conda activate diffusion
+%runscript
+    # 容器执行时默认运行的命令
+    python --version
+
+
